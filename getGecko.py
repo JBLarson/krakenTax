@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 
 import time
 import datetime
@@ -82,7 +83,7 @@ LskUsd, LskEur = getCoinDict('lisk', 'usd', epochOneYearAgo, epochToday), getCoi
 FilUsd, FilEur = getCoinDict('filecoin', 'usd', epochOneYearAgo, epochToday), getCoinDict('filecoin', 'eur', epochOneYearAgo, epochToday)
 DotUsd, DotEur = getCoinDict('polkadot', 'usd', epochOneYearAgo, epochToday), getCoinDict('polkadot', 'eur', epochOneYearAgo, epochToday)
 AdaUsd, AdaEur = getCoinDict('cardano', 'usd', epochOneYearAgo, epochToday), getCoinDict('cardano', 'eur', epochOneYearAgo, epochToday)
-
+DaiEur = getCoinDict('dai', 'eur', epochOneYearAgo, epochToday)
 
 #print(EthEur)
 
@@ -117,24 +118,15 @@ extractDict = {
 	'FilUsd': FilUsd, 'FilEur': FilEur,
 	'DotUsd': DotUsd, 'DotEur': DotEur,
 	'XmrUsd': XmrUsd, 'XmrEur': XmrEur,
-	'AdaUsd': AdaUsd, 'AdaEur': AdaEur
+	'AdaUsd': AdaUsd, 'AdaEur': AdaEur,
+	'DaiEur': DaiEur
 }
 
-"""
 
-jsonOutAddr = 'data/cryptoData4' + '.json'
+jsonOutAddr = 'data/cryptoData' + '.json'
 try:
 	with open(jsonOutAddr, 'w') as fp1: json.dump(extractDict, fp1)
 
-	#with open(jsonOutAddr, 'w') as fp1: json.dump(coinTodayEur, fp1)
-	#with open(jsonOutAddr, 'w') as fp1: json.dump(coinTodayGbp, fp1)
-	#with open(jsonOutAddr, 'w') as fp1: json.dump(coinTodayJpy, fp1)
-
-
 	print("\nSuccess Creating Crypto Json on/at: " + str(today))
-
 except Exception as e:
 	print(e)
-
-
-"""
