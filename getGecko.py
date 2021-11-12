@@ -83,6 +83,8 @@ LskUsd, LskEur = getCoinDict('lisk', 'usd', epochOneYearAgo, epochToday), getCoi
 FilUsd, FilEur = getCoinDict('filecoin', 'usd', epochOneYearAgo, epochToday), getCoinDict('filecoin', 'eur', epochOneYearAgo, epochToday)
 DotUsd, DotEur = getCoinDict('polkadot', 'usd', epochOneYearAgo, epochToday), getCoinDict('polkadot', 'eur', epochOneYearAgo, epochToday)
 AdaUsd, AdaEur = getCoinDict('cardano', 'usd', epochOneYearAgo, epochToday), getCoinDict('cardano', 'eur', epochOneYearAgo, epochToday)
+LinkUsd, LinkEur = getCoinDict('chainlink', 'usd', epochOneYearAgo, epochToday), getCoinDict('chainlink', 'eur', epochOneYearAgo, epochToday)
+AtomUsd, AtomEur = getCoinDict('cosmos', 'usd', epochOneYearAgo, epochToday), getCoinDict('cosmos', 'eur', epochOneYearAgo, epochToday)
 DaiEur = getCoinDict('dai', 'eur', epochOneYearAgo, epochToday)
 
 #print(EthEur)
@@ -119,6 +121,8 @@ extractDict = {
 	'DotUsd': DotUsd, 'DotEur': DotEur,
 	'XmrUsd': XmrUsd, 'XmrEur': XmrEur,
 	'AdaUsd': AdaUsd, 'AdaEur': AdaEur,
+	'LinkUsd': LinkUsd, 'LinkEur': LinkEur,
+	'AtomUsd': AtomUsd, 'AtomEur': AtomEur,
 	'DaiEur': DaiEur
 }
 
