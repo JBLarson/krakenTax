@@ -3,7 +3,7 @@
 import json
 
 # import kraken data
-sortedTradesInAddr = 'data/pricedTrades2.json'
+sortedTradesInAddr = 'data/pricedTrades.json'
 
 with open(sortedTradesInAddr, 'r') as r:
 	tradeData = json.load(r)
@@ -68,7 +68,7 @@ def missingDataStats():
 
 
 	missingBuy, missingSell = buyTests.count(None), sellTests.count(None)
-	print("\nBuy trades: " + str(missingBuy) + " out of: " + str(len(buyTrades)))
-	print("Sell trades: " + str(missingSell) + " out of: " + str(len(sellTrades)))
+	print("\nBuy Trade Errors: " + str(missingBuy) + " out of: " + str(len(buyTrades)))
+	print("Sell Trade Errors: " + str(missingSell) + " out of: " + str(len(sellTrades)) + "\n")
 
 testTrades = missingDataStats()
