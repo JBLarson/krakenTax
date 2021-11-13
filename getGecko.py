@@ -67,7 +67,7 @@ def getCoinDict(coin, baseCurrency, fromTimeStamp, toTimestamp):
 		priceDict.update({localDT: price})
 
 	returnDict = {"base": baseCurrency, "quote": coin, "data": priceDict}
-
+	print("Retreived Data for: " + str(coin) + "/" + str(baseCurrency))
 	return returnDict
 
 
@@ -85,6 +85,10 @@ DotUsd, DotEur = getCoinDict('polkadot', 'usd', epochOneYearAgo, epochToday), ge
 AdaUsd, AdaEur = getCoinDict('cardano', 'usd', epochOneYearAgo, epochToday), getCoinDict('cardano', 'eur', epochOneYearAgo, epochToday)
 LinkUsd, LinkEur = getCoinDict('chainlink', 'usd', epochOneYearAgo, epochToday), getCoinDict('chainlink', 'eur', epochOneYearAgo, epochToday)
 AtomUsd, AtomEur = getCoinDict('cosmos', 'usd', epochOneYearAgo, epochToday), getCoinDict('cosmos', 'eur', epochOneYearAgo, epochToday)
+YfiUsd, YfiEur = getCoinDict('yearn-finance', 'usd', epochOneYearAgo, epochToday), getCoinDict('yearn-finance', 'eur', epochOneYearAgo, epochToday)
+KavaUsd, KavaEur = getCoinDict('kava', 'usd', epochOneYearAgo, epochToday), getCoinDict('kava', 'eur', epochOneYearAgo, epochToday)
+BatUsd, BatEur = getCoinDict('basic-attention-token', 'usd', epochOneYearAgo, epochToday), getCoinDict('basic-attention-token', 'eur', epochOneYearAgo, epochToday)
+
 DaiEur = getCoinDict('dai', 'eur', epochOneYearAgo, epochToday)
 
 #print(EthEur)
@@ -123,6 +127,9 @@ extractDict = {
 	'AdaUsd': AdaUsd, 'AdaEur': AdaEur,
 	'LinkUsd': LinkUsd, 'LinkEur': LinkEur,
 	'AtomUsd': AtomUsd, 'AtomEur': AtomEur,
+	'YfiUsd': YfiUsd, 'YfiEur': YfiEur,
+	'KavaUsd': KavaUsd, 'KavaEur': KavaEur,
+	'BatUsd': BatUsd, 'BatEur': 'BatEur',
 	'DaiEur': DaiEur
 }
 
@@ -131,6 +138,6 @@ jsonOutAddr = 'data/cryptoData' + '.json'
 try:
 	with open(jsonOutAddr, 'w') as fp1: json.dump(extractDict, fp1)
 
-	print("\nSuccess Creating Crypto Json on/at: " + str(today))
+	print("\nSuccess Creating Crypto Json on/at: " + str(today) + "\n")
 except Exception as e:
 	print(e)
