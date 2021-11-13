@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 
 
-   
 import json
+from kFuncs import *
 
 
 # import kraken data
@@ -20,9 +20,9 @@ sortedSells, sortedBuys = tradeData['sell'], tradeData['buy']
 jsonInAddr = 'data/cryptoData.json'
 
 with open(jsonInAddr, 'r') as f:
-	gekkoData = json.load(f)
+	geckoData = json.load(f)
 
-gekkoKeys =gekkoData.keys()
+gekkoKeys =geckoData.keys()
 
 
 def gekkoPairFunc(gekkoKeys):
@@ -49,16 +49,23 @@ gekkoPairs = gekkoPairFunc(gekkoKeys)
 
 
 def mdyToYMD(ogDate):
-	ogDateSplit = ogDate.split("/")
-	if len(ogDateSplit[0]) == 1:	month = '0' + str(ogDateSplit[0])
-	else:	month = ogDateSplit[0]
-	if len(ogDateSplit[1]) == 1:	day = '0' + str(ogDateSplit[1])
-	else:	day = ogDateSplit[1]
-	if len(ogDateSplit[2]) == 2:	year = '20' + str(ogDateSplit[2])
-	else:	year = ogDateSplit[2]
+	if '/' in ogDate:
+		ogDateSplit = ogDate.split("/")
+	elif '-' in ogDate:
+		ogDateSplit = ogDate.split('-')
+	if ogDateSplit[0] == '2021' or ogDateSplit[0] == '2020':
+		ymdOutput = ogDate
+	else:
+		print(ogDateSplit)
+		if len(ogDateSplit[0]) == 1:	month = '0' + str(ogDateSplit[0])
+		else:	month = ogDateSplit[0]
+		if len(ogDateSplit[1]) == 1:	day = '0' + str(ogDateSplit[1])
+		else:	day = ogDateSplit[1]
+		if len(ogDateSplit[2]) == 2:	year = '20' + str(ogDateSplit[2])
+		else:	year = ogDateSplit[2]
 
 
-	ymdOutput = str(year) + '-' + str(month) + '-' + str(day)
+		ymdOutput = str(year) + '-' + str(month) + '-' + str(day)
 	return ymdOutput
 
 
@@ -68,12 +75,10 @@ def getPairPrice(quote, base, targetDate):
 	pair = str(quote.capitalize()) + str(base.capitalize())
 	targetPrice = "Couldn't find date"
 
-	pairData = gekkoData[pair]
+	pairData = geckoData[pair]
 	pairData = pairData['data']
 	for dailyData in pairData:
 		dailyDateShort = dailyData[:10]
-		#print((dailyDateShort))
-		#print((targetDate))
 		if dailyDateShort != targetDate:
 			pass
 		elif dailyDateShort == targetDate:
@@ -114,7 +119,7 @@ for gekkoPair in gekkoPairs:
 def getHistSymbolPrice(tradeSymbol, tradeDate):
 	symbolUsdPair = str(tradeSymbol).capitalize() + str('Usd')
 	try:
-		histSymbol = gekkoData[symbolUsdPair]['data'][tradeDate]
+		histSymbol = geckoData[symbolUsdPair]['data'][tradeDate]
 
 	except Exception as e:
 		print("Error finding historical data for: " + str(tradeSymbol))
@@ -143,13 +148,13 @@ def sortingFunction(sortedTradeData):
 
 			if pair in gekkoPairValueList:
 
-				currentHistData = gekkoData[pair]
+				currentHistData = geckoData[pair]
 				currentTrade = currentHistData['data']
 				currentHistQuote = currentTrade[tradeDate]
 				trade['histQuote'] = currentHistQuote
 				tradeList.append(trade)
 			elif pair not in gekkoPairValueList:
-				print("Pair not in gekkoPairs: " +str(pair))
+				#print("Pair not in gekkoPairs: " +str(pair))
 				tradeList.append(trade)
 
 
@@ -160,18 +165,11 @@ def sortingFunction(sortedTradeData):
 
 	#return currentTradeList
 
-print("\nSell orders")
 
 sortedBuyOrders = sortingFunction(sortedBuys)
 
-
-
-
 sortedSellOrders = sortingFunction(sortedSells)
 
-
-
-print("\n\nFunc Output")
 
 
 
@@ -185,12 +183,18 @@ def quoteBaseFunc(sortedOrders):
 		orderDate = mdyToYMD(order['date'])
 		orderHistQuote = order['histQuote']
 
-		if orderBase != 'USD' and orderBase != 'EUR':
+		if orderBase == 'USD' or orderBase == 'DAI':
+			order['histBase'] = 1
+
+		elif orderBase != 'USD' and orderBase != 'EUR':
 
 			histPrice = getHistSymbolPrice(orderBase, orderDate)
 			order['histBase'] = histPrice
 
-		if orderHistQuote == '':
+		if orderQuote == 'USD' or orderQuote == 'DAI':
+			order['histQuote'] = 1
+
+		elif orderHistQuote == '':
 
 			histPrice = getHistSymbolPrice(orderQuote, orderDate)
 			order['histQuote'] = histPrice
@@ -200,12 +204,39 @@ def quoteBaseFunc(sortedOrders):
 	return pricedSortedOrders
 
 
+
+
+
 pricedSortedSells = quoteBaseFunc(sortedSellOrders)
 pricedSortedBuys = quoteBaseFunc(sortedBuyOrders)
 
 
 
+daiEurDict = geckoData['DaiEur']['data']
 
+
+def addEuroPricing(trade):
+	baseCurrency = trade['base']
+	tradeDate = trade['date']
+	if baseCurrency == 'EUR':
+		ymdTradeDate = mdyToYMD(tradeDate)
+		histEuroPrice = daiEurDict[ymdTradeDate]
+		trade['histBase'] = histEuroPrice	
+
+
+
+for trade in pricedSortedBuys:
+	addEuroPricingTest = addEuroPricing(trade)
+
+for trade in pricedSortedSells:
+	addEuroPricingTest = addEuroPricing(trade)
+
+
+
+
+
+"""
+# uncomment to display trade data
 
 print("\n\nBuy Trades")
 
@@ -218,7 +249,7 @@ for trade in pricedSortedSells:
 	print("\n\n")
 	print(trade)
 
-
+"""
 
 
 
